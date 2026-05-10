@@ -1,0 +1,130 @@
+
+<tool id="agrvate" name="AgrVATE" version="1.0.2+galaxy0" profile="22.05">
+    <description>typing-only Staphylococcus aureus agr locus classification</description>
+
+    <requirements>
+        <requirement type="package" version="1.0.2">agrvate</requirement>
+    </requirements>
+
+    <version_command>agrvate --version</version_command>
+
+<command detect_errors="exit_code"><![CDATA[
+set -euo pipefail;
+
+rm -f input.fasta;
+ln -s '$input_fasta' input.fasta;
+
+agrvate -i input.fasta --typing-only --force;
+
+copy_or_touch() {
+    pattern="\$1";
+    output="\$2";
+    matched_file="\$(find . -name "\${pattern}" -type f -print -quit || true)";
+
+    if [ -n "\${matched_file}" ] && [ -f "\${matched_file}" ]; then
+        cp "\${matched_file}" "\${output}";
+    else
+        touch "\${output}";
+    fi;
+};
+
+copy_or_touch '*-summary.tab' agrvate_summary.tab;
+copy_or_touch '*-agr_gp.tab' agrvate_agr_group_hits.tab;
+copy_or_touch '*-error-report.tab' agrvate_error_report.tab;
+
+agrvate --version > agrvate_version.txt 2>&1;
+]]></command>
+
+    <inputs>
+        <param
+            name="input_fasta"
+            type="data"
+            format="fasta"
+            label="S. aureus genome assembly FASTA"
+            help="Input genome assembly in FASTA format. AgrVATE is intended for Staphylococcus aureus assemblies." />
+    </inputs>
+
+    <outputs>
+        <data
+            name="summary"
+            format="tabular"
+            label="${tool.name} on ${on_string}: agr typing summary"
+            from_work_dir="agrvate_summary.tab" />
+
+        <data
+            name="agr_group_hits"
+            format="tabular"
+            label="${tool.name} on ${on_string}: agr group hits"
+            from_work_dir="agrvate_agr_group_hits.tab" />
+
+        <data
+            name="error_report"
+            format="tabular"
+            label="${tool.name} on ${on_string}: error report"
+            from_work_dir="agrvate_error_report.tab" />
+
+        <data
+            name="version"
+            format="txt"
+            label="${tool.name}: version"
+            from_work_dir="agrvate_version.txt" />
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="4">
+            <param name="input_fasta" value="agrvate_gp1.fasta" />
+            <output name="summary" ftype="tabular">
+                <assert_contents>
+                    <has_text text="gp" />
+                </assert_contents>
+            </output>
+            <output name="version" ftype="txt">
+                <assert_contents>
+                    <has_text text="agrvate v1.0.2" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+AgrVATE: Agr Variant Assessment & Typing Engine
+================================================
+
+AgrVATE identifies the Staphylococcus aureus agr locus type from a genome assembly FASTA file.
+
+This Galaxy wrapper runs AgrVATE in typing-only mode:
+
+    agrvate -i input.fasta --typing-only --force
+
+Input
+-----
+
+- A Staphylococcus aureus genome assembly in FASTA format.
+
+Outputs
+-------
+
+- agr typing summary
+- agr group hits
+- error report
+- AgrVATE version
+
+Database
+--------
+
+The AgrVATE conda package includes the AgrVATE database directory:
+
+    $CONDA_PREFIX/bin/agrvate_databases
+
+Therefore this wrapper does not expose the -d / --databases option and does not require a Galaxy Data Manager.
+
+Notes
+-----
+
+This wrapper intentionally uses AgrVATE typing-only mode. It does not run the optional MUMmer/Snippy-based agr operon extraction or frameshift detection steps.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1128/spectrum.01334-21</citation>
+    </citations>
+</tool>
