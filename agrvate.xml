@@ -47,7 +47,7 @@ cp 'input-results/input-agr_gp.tab' '$agr_group_hits'
             <param name="input_fasta" value="agrvate_gp1.fasta" ftype="fasta" />
             <output name="summary" ftype="tabular">
                 <assert_contents>
-                    <has_n_columns n="7" />
+                    <has_n_columns n="6" />
                     <has_text text="gp" />
                 </assert_contents>
             </output>
@@ -80,8 +80,8 @@ Outputs
 
 - **agr typing summary** — one row per sample with the agr group call (gp1–gp4,
   ``u`` for unknown, ``m`` for multiple) and a per-step pass/fail breakdown
-  across input check, databases check, agr typing, operon check and snippy
-  frameshift detection.
+  across input check, databases check, outdir check, agr typing and operon
+  check.
 - **agr group hits** — the kmer-search table that produced the call.
 
 Database
@@ -89,7 +89,7 @@ Database
 
 The bioconda ``agrvate`` package ships its database directory at::
 
-    $CONDA_PREFIX/share/agrvate-<version>/agrvate_databases/
+    $CONDA_PREFIX/bin/agrvate_databases/
 
 AgrVATE auto-discovers this path when installed via conda, so this wrapper
 does not expose the ``-d`` / ``--databases`` option and does not require a
