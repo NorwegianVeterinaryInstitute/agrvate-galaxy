@@ -8,6 +8,6 @@ long_description: |
   underlying agr group hits table.
 categories:
   - Sequence Analysis
-remote_repository_url: "https://github.com/NorwegianVeterinaryInstitute/agrvate-galaxy"
+remote_repository_url: "https://github.com/NorwegianVeterinaryInstitute/agrvate-galaxy/tree/main"
 homepage_url: "https://github.com/VishnuRaghuram94/AgrVATE"
 type: unrestricted
