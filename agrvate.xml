@@ -9,30 +9,30 @@
     <version_command>agrvate --version</version_command>
 
 <command detect_errors="exit_code"><![CDATA[
-set -euo pipefail;
+set -euo pipefail
 
-rm -f input.fasta;
-ln -s '$input_fasta' input.fasta;
+rm -f input.fasta
+ln -s '$input_fasta' input.fasta
 
-agrvate -i input.fasta --typing-only --force;
+agrvate -i input.fasta --typing-only --force
 
 copy_or_touch() {
-    pattern="\$1";
-    output="\$2";
-    matched_file="\$(find . -name "\${pattern}" -type f -print -quit || true)";
+    pattern="\$1"
+    output="\$2"
+    matched_file="\$(find . -name "\${pattern}" -type f -print -quit || true)"
 
     if [ -n "\${matched_file}" ] && [ -f "\${matched_file}" ]; then
-        cp "\${matched_file}" "\${output}";
+        cp "\${matched_file}" "\${output}"
     else
-        touch "\${output}";
-    fi;
-};
+        touch "\${output}"
+    fi
+}
 
-copy_or_touch '*-summary.tab' agrvate_summary.tab;
-copy_or_touch '*-agr_gp.tab' agrvate_agr_group_hits.tab;
-copy_or_touch '*-error-report.tab' agrvate_error_report.tab;
+copy_or_touch '*-summary.tab' agrvate_summary.tab
+copy_or_touch '*-agr_gp.tab' agrvate_agr_group_hits.tab
+copy_or_touch '*-error-report.tab' agrvate_error_report.tab
 
-agrvate --version > agrvate_version.txt 2>&1;
+agrvate --version > agrvate_version.txt 2>&1
 ]]></command>
 
     <inputs>
