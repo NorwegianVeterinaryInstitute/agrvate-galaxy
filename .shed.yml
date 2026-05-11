@@ -1,17 +1,13 @@
-
-cat > .shed.yml <<'EOF'
 name: agrvate
 owner: ajkarloss
-description: agrVATE Galaxy wrapper for detecting agr groups in Staphylococcus aureus assemblies
+description: "AgrVATE Galaxy wrapper for typing the agr locus in Staphylococcus aureus assemblies"
 long_description: |
-  agrVATE is a tool for identifying accessory gene regulator groups in
-  Staphylococcus aureus genome assemblies. This Galaxy wrapper runs agrVATE
-  on a FASTA assembly input and reports summary results, agr group hits,
-  error report, and version information.
+  AgrVATE identifies the accessory gene regulator (agr) group of
+  Staphylococcus aureus genome assemblies. This Galaxy wrapper runs AgrVATE
+  in typing-only mode and reports the per-sample agr typing summary and the
+  underlying agr group hits table.
 categories:
   - Sequence Analysis
-  - Microbiology
-remote_repository_url: https://github.com/NorwegianVeterinaryInstitute/agrvate-galaxy
-homepage_url: https://github.com/NorwegianVeterinaryInstitute/agrvate-galaxy
+remote_repository_url: "https://github.com/NorwegianVeterinaryInstitute/agrvate-galaxy"
+homepage_url: "https://github.com/VishnuRaghuram94/AgrVATE"
 type: unrestricted
-EOF
